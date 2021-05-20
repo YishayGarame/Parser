@@ -15,24 +15,22 @@ void Parser::parse()
 	cout << "| E" << endl;
 	Symbol x = stack.back();
 
-	//DEBUG
-	int i = 0;
+
+	// while loop until we get the "$" the end of the stack
 	while (!(x.getType() == dollar.getType() && x.getSymbol() == dollar.getSymbol()))
 	{
 		if (x.getType() == TERM && x.getSymbol() == a)
-		{
-			//accepted ......
-			
+		{			
 			stack.pop_back();
 			Symbol aSym(a, TERM);
 			accepted.push_back(aSym);
 			a = nextToken();
 
-			//PRINT STACK:
-			// print
+			//print accepted 
 			printLM();
 			cout << "| ";
 			vector<Symbol> tmp;
+			//PRINT STACK:
 			while (!stack.empty())
 			{
 				Symbol curr = stack.back();
@@ -82,8 +80,9 @@ void Parser::parse()
 			// holds the rule number from table
 			int rule = table[x.getSymbol()][a];
 			//pop
-
 			stack.pop_back();
+
+			//print accepted 
 			printLM();
 			cout << "| ";
 			// push into stack the rules symbols
@@ -119,9 +118,8 @@ void Parser::parse()
 				tmp.pop_back();
 				stack.push_back(curr);
 			}
-			//
+			
 			cout << endl;
-			//cout << ++i << endl;
 		}
 		// LET X
 		x = stack.back();
@@ -143,13 +141,11 @@ terminal Parser::nextToken()
 
 void Parser::printLM()
 {
-
-
+	//holds the accepted arguments
 	vector<Symbol> tmp;
 	while (!accepted.empty())
 	{
 		Symbol curr = accepted.back();
-		//cout << terminalStrings[curr.getSymbol()] <<" ";
 		accepted.pop_back();
 		tmp.push_back(curr);
 		
@@ -157,6 +153,7 @@ void Parser::printLM()
 	while (!tmp.empty())
 	{
 		Symbol curr = tmp.back();
+		//cout in the right way not backwords
 		cout << terminalStrings[curr.getSymbol()] <<" ";
 		tmp.pop_back();
 		accepted.push_back(curr);
